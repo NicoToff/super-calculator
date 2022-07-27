@@ -15,6 +15,7 @@ export default function ErrorRateFieldBox() {
     // Calculating and formatting error % ------------------------------------------------------------------
     const errorPercentage = ((nbrErrors / nbrWords) * 100).toFixed(2);
     const errorPercentageString = errorPercentage + " %";
+    // Building OutputField dynamically --------------------------------------------------------------------
     let errorPercentageOutputField;
     const [epofLabel, epofKey] = ["% erreurs", "3"];
     // Calculating and formatting grading out of 10, initially ---------------------------------------------
