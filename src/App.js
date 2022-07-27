@@ -3,6 +3,7 @@ import "./css/App.css";
 import "./css/solarBootswtach.min.css";
 
 import ErrorRateFieldBox from "./components/composite/ErrorRateFieldBox.js";
+import ComplianceRateFieldBox from "./components/composite/ComplianceRateFieldBox.js";
 
 export default function App() {
     return (
@@ -13,7 +14,7 @@ export default function App() {
                 <div className="container">
                     <div className="row">
                         <ErrorRateFieldBox />
-                        <ErrorRateFieldBox /> <ErrorRateFieldBox />
+                        <ComplianceRateFieldBox />
                     </div>
                 </div>
             </header>
