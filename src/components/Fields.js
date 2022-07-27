@@ -14,7 +14,7 @@ export function InputField({ setter, type, label = "Input", small = false }) {
     );
 }
 
-export function OutputField({ value, type, label = "Output", classes }) {
+export function OutputField({ value, type, label = "Output", classes = "" }) {
     let classesTotal = "form-control " + classes;
 
     return (
