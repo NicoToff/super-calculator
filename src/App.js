@@ -1,8 +1,9 @@
-import logo from "./logo.svg";
-import "./App.css";
+import logo from "./img/logo.svg";
+import "./css/App.css";
 import "./css/solarBootswtach.min.css";
-import { InputField, OutputField } from "./hooks/Fields.js";
+import { InputField, OutputField } from "./components/Fields.js";
 import { useState } from "react";
+import FieldBox from "./components/FieldBox.js";
 
 export default function App() {
     let [nbrWords, setNbrWords] = useState(0);
@@ -10,13 +11,17 @@ export default function App() {
     nbrWords = Number(nbrWords);
     nbrErrors = Number(nbrErrors);
 
-    let outputField;
+    let errorPercentageOutputField;
     if (nbrWords < nbrErrors) {
-        outputField = <OutputField value={"Erreur"} type="text" label="% erreurs" classes="is-invalid" />;
+        errorPercentageOutputField = (
+            <OutputField value={"Erreur"} type="text" label="% erreurs" classes="is-invalid" />
+        );
     } else if (nbrWords <= 0) {
-        outputField = <OutputField value={"Entrez les valeurs"} type="text" label="% erreurs" />;
+        errorPercentageOutputField = (
+            <OutputField value={"Entrez les valeurs"} type="text" label="% erreurs" />
+        );
     } else {
-        outputField = (
+        errorPercentageOutputField = (
             <OutputField
                 value={((nbrErrors / nbrWords) * 100).toFixed(2) + " %"}
                 type="text"
@@ -31,12 +36,14 @@ export default function App() {
             <header className="App-header">
                 <h1>Super React Calculator</h1>
                 <img src={logo} className="App-logo" alt="React logo" />
-                <div className="form-group">
-                    <h2>Pourcentage d'erreurs</h2>
-                    <InputField setter={setNbrWords} type="number" label="Nbr mots" small={true} />
-                    <InputField setter={setNbrErrors} type="number" label="Nbr erreurs" small={true} />
-                    {outputField}
-                </div>
+                <FieldBox
+                    title="Pourcentage d'erreurs"
+                    fields={[
+                        <InputField setter={setNbrWords} type="number" label="Nbr mots" small={true} />,
+                        <InputField setter={setNbrErrors} type="number" label="Nbr erreurs" small={true} />,
+                        errorPercentageOutputField,
+                    ]}
+                />
             </header>
         </div>
     );
