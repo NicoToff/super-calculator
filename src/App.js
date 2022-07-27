@@ -10,7 +10,12 @@ export default function App() {
             <header className="App-header">
                 <h1>Super React Calculator</h1>
                 <img src={logo} className="App-logo" alt="React logo" />
-                <ErrorRateFieldBox />
+                <div className="container">
+                    <div className="row">
+                        <ErrorRateFieldBox />
+                        <ErrorRateFieldBox /> <ErrorRateFieldBox />
+                    </div>
+                </div>
             </header>
         </div>
     );
