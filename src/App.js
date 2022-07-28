@@ -2,8 +2,7 @@ import logo from "./img/logo.svg";
 import "./css/App.css";
 import "./css/solarBootswtach.min.css";
 
-import ErrorRateFieldBox from "./components/composite/ErrorRateFieldBox.js";
-import ComplianceRateFieldBox from "./components/composite/ComplianceRateFieldBox.js";
+import { ErrorRateFieldBox, ComplianceRateFieldBox } from "./components/composite/CompositeFieldBox.js";
 
 export default function App() {
     return (

@@ -4,7 +4,7 @@ import { useState } from "react";
 import FieldBox from "../FieldBox.js";
 import Accordion from "../Accordion.js";
 
-export default function ErrorRateFieldBox() {
+export function ErrorRateFieldBox() {
     let [nbrWords, setNbrWords] = useState(0);
     nbrWords = Number(nbrWords);
     let [nbrErrors, setNbrErrors] = useState(0);
@@ -94,6 +94,68 @@ export default function ErrorRateFieldBox() {
                     }
                     key="5"
                 />,
+            ]}
+        />
+    );
+}
+
+export function ComplianceRateFieldBox() {
+    let [requiredElements, setRequiredElements] = useState(0);
+    requiredElements = Number(requiredElements);
+    let [placedElements, setPlacedElements] = useState(0);
+    placedElements = Number(placedElements);
+
+    // Calculating and formatting compliance % -------------------------------------------------------------
+    const compliancePercentage = ((placedElements / requiredElements) * 100).toFixed(2);
+    const compliancePercentageString = compliancePercentage + " %";
+
+    // Building OutputField dynamically --------------------------------------------------------------------
+    let complianceRateOutputField;
+    const [crofLabel, crofKey] = ["Respecté à ... %", "3"];
+
+    // Conditionnally renders OutputFields based on the validity of the InputField states ------------------
+    if (requiredElements < placedElements || requiredElements < 0 || placedElements < 0) {
+        complianceRateOutputField = (
+            <OutputField value="Erreur" type="text" label={crofLabel} classes="is-invalid" key={crofKey} />
+        );
+    } else if (requiredElements === 0) {
+        complianceRateOutputField = (
+            <OutputField value="Entrez les valeurs" type="text" label={crofLabel} key={crofKey} />
+        );
+    } else {
+        complianceRateOutputField = (
+            <OutputField
+                value={compliancePercentageString}
+                type="text"
+                label={crofLabel}
+                classes="is-valid"
+                key={crofKey}
+            />
+        );
+    }
+
+    return (
+        <FieldBox
+            title="Respect des consignes"
+            fields={[
+                <InputField
+                    setter={setRequiredElements}
+                    type="number"
+                    label="Nbr exigé"
+                    small={true}
+                    min="0"
+                    key="1"
+                />,
+                <InputField
+                    setter={setPlacedElements}
+                    type="number"
+                    label="Nbr effectué"
+                    small={true}
+                    min="0"
+                    key="2"
+                />,
+                complianceRateOutputField,
+                <Accordion title="Options" key="4" />,
             ]}
         />
     );
