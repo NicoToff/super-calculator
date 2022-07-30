@@ -13,18 +13,19 @@ export function ErrorRateFieldBox() {
     optionMaxGrade = Number(optionMaxGrade);
 
     // Calculating and formatting error % ------------------------------------------------------------------
-    const errorPercentage = ((nbrErrors / nbrWords) * 100).toFixed(2);
+    let errorPercentage = ((nbrErrors / nbrWords) * 100).removeTrailingZeros(2);
+
     const errorPercentageString = errorPercentage + " %";
     // Building OutputField dynamically --------------------------------------------------------------------
     let errorPercentageOutputField;
     const [epofLabel, epofKey] = ["% erreurs", "3"];
     // Calculating and formatting grading out of 10, initially ---------------------------------------------
     // This value can be dynamically changed with the Option field -----------------------------------------
-    const parsing = (10 - Number(errorPercentage)) * (optionMaxGrade / 10);
-    const grade = parsing >= 0 ? parsing : 0;
-    const gradeString = isFloat(grade)
-        ? grade.toFixed(2) + " / " + optionMaxGrade
-        : grade + " / " + optionMaxGrade;
+    let grade = (10 - errorPercentage) * (optionMaxGrade / 10);
+    if (grade >= 0) {
+        grade = 0; // Setting min grade at 0
+    }
+    const gradeString = grade.removeTrailingZeros(2) + " / " + optionMaxGrade;
     let gradeOutputField;
     const [gofLabel, gofKey] = ["Résultat sur " + optionMaxGrade, "4"];
 
@@ -169,3 +170,12 @@ export function ComplianceRateFieldBox() {
 function isFloat(n) {
     return Number(n) === n && n % 1 !== 0;
 }
+
+Number.prototype.removeTrailingZeros = function (accuracy = null) {
+    let num = Number(this.valueOf());
+    if (isNaN(num)) {
+        return this.valueOf();
+    } else {
+        return isFloat(num) && accuracy != null ? num.toFixed(accuracy) : num;
+    }
+};
