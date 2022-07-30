@@ -5,7 +5,7 @@ import FieldBox from "../FieldBox.js";
 import Accordion from "../Accordion.js";
 import { generateUUID } from "../../helperFunctions.js";
 
-export function ErrorRateFieldBox() {
+export function ErrorRateFieldBox({ classes = undefined }) {
     let [nbrWords, setNbrWords] = useState(0);
     nbrWords = Number(nbrWords);
     let [nbrErrors, setNbrErrors] = useState(0);
@@ -129,11 +129,12 @@ export function ErrorRateFieldBox() {
                 grade.OutputField,
                 <Accordion title="Options" body={maxGradeInputField} key={generateUUID()} />,
             ]}
+            classes={classes}
         />
     );
 }
 
-export function ComplianceRateFieldBox() {
+export function ComplianceRateFieldBox({ classes = undefined }) {
     let [requiredElements, setRequiredElements] = useState(0);
     requiredElements = Number(requiredElements);
     let [placedElements, setPlacedElements] = useState(0);
@@ -207,6 +208,7 @@ export function ComplianceRateFieldBox() {
         <FieldBox
             title="Respect des consignes"
             fields={[requiredElementsInputField, placedElementsInputField, complianceRate.OutputField]}
+            classes={classes}
         />
     );
 }
