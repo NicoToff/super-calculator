@@ -9,25 +9,23 @@ export function ErrorRateFieldBox() {
     nbrWords = Number(nbrWords);
     let [nbrErrors, setNbrErrors] = useState(0);
     nbrErrors = Number(nbrErrors);
-    let [optionMaxGrade, setOptionMaxGrade] = useState(10);
-    optionMaxGrade = Number(optionMaxGrade);
+    let [maxGrade, setMaxGrade] = useState(10);
+    maxGrade = Number(maxGrade);
 
     // Calculating and formatting error % ------------------------------------------------------------------
     let errorPercentage = ((nbrErrors / nbrWords) * 100).removeTrailingZeros(2);
 
-    const errorPercentageString = errorPercentage + " %";
     // Building OutputField dynamically --------------------------------------------------------------------
     let errorPercentageOutputField;
     const [epofLabel, epofKey] = ["% erreurs", "3"];
     // Calculating and formatting grading out of 10, initially ---------------------------------------------
     // This value can be dynamically changed with the Option field -----------------------------------------
-    let grade = (10 - errorPercentage) * (optionMaxGrade / 10);
-    if (grade >= 0) {
+    let grade = ((10 - errorPercentage) * (maxGrade / 10)).removeTrailingZeros(2);
+    if (grade <= 0) {
         grade = 0; // Setting min grade at 0
     }
-    const gradeString = grade.removeTrailingZeros(2) + " / " + optionMaxGrade;
     let gradeOutputField;
-    const [gofLabel, gofKey] = ["Résultat sur " + optionMaxGrade, "4"];
+    const [gofLabel, gofKey] = ["Résultat sur " + maxGrade, "4"];
 
     // Conditionnally renders OutputFields based on the validity of the InputField states ------------------
     if (nbrWords < nbrErrors || nbrWords < 0 || nbrErrors < 0) {
@@ -47,7 +45,7 @@ export function ErrorRateFieldBox() {
     } else {
         errorPercentageOutputField = (
             <OutputField
-                value={errorPercentageString}
+                value={errorPercentage + " %"}
                 type="text"
                 label={epofLabel}
                 classes="is-valid"
@@ -55,7 +53,13 @@ export function ErrorRateFieldBox() {
             />
         );
         gradeOutputField = (
-            <OutputField value={gradeString} type="text" label={gofLabel} classes="is-valid" key={gofKey} />
+            <OutputField
+                value={grade + " / " + maxGrade}
+                type="text"
+                label={gofLabel}
+                classes="is-valid"
+                key={gofKey}
+            />
         );
     }
 
@@ -85,7 +89,7 @@ export function ErrorRateFieldBox() {
                     title="Options"
                     body={
                         <InputField
-                            setter={setOptionMaxGrade}
+                            setter={setMaxGrade}
                             type="number"
                             label="Résultat sur ..."
                             defaultValue="10"
