@@ -3,6 +3,7 @@ import { InputField, OutputField } from "../Fields.js";
 import { useState } from "react";
 import FieldBox from "../FieldBox.js";
 import Accordion from "../Accordion.js";
+import { generateUUID } from "../../helperFunctions.js";
 
 export function ErrorRateFieldBox() {
     let [nbrWords, setNbrWords] = useState(0);
@@ -14,10 +15,24 @@ export function ErrorRateFieldBox() {
 
     //#region Input Fields
     const nbrWordsInputField = (
-        <InputField setter={setNbrWords} type="number" label="Nbr mots" small={true} key="1" min="0" />
+        <InputField
+            setter={setNbrWords}
+            type="number"
+            label="Nbr mots"
+            small={true}
+            key={generateUUID()}
+            min="0"
+        />
     );
     const nbrErrorsInputField = (
-        <InputField setter={setNbrErrors} type="number" label="Nbr erreurs" small={true} key="2" min="0" />
+        <InputField
+            setter={setNbrErrors}
+            type="number"
+            label="Nbr erreurs"
+            small={true}
+            key={generateUUID()}
+            min="0"
+        />
     );
     const maxGradeInputField = (
         <InputField
@@ -26,7 +41,7 @@ export function ErrorRateFieldBox() {
             label="Résultat sur ..."
             defaultValue="10"
             min="1"
-            key="6"
+            key={generateUUID()}
         />
     );
     //#endregion
@@ -34,13 +49,13 @@ export function ErrorRateFieldBox() {
     const errorPercentage = {
         value: ((nbrErrors / nbrWords) * 100).removeTrailingZeros(2),
         label: "% erreurs",
-        key: "3",
+        key: generateUUID(),
     };
 
     const grade = {
         value: ((10 - errorPercentage.value) * (maxGrade / 10)).removeTrailingZeros(2),
         label: "Résultat sur " + maxGrade,
-        key: "4",
+        key: generateUUID(),
     };
 
     if (grade.value < 0) {
@@ -112,7 +127,7 @@ export function ErrorRateFieldBox() {
                 nbrErrorsInputField,
                 errorPercentage.OutputField,
                 grade.OutputField,
-                <Accordion title="Options" body={maxGradeInputField} key="5" />,
+                <Accordion title="Options" body={maxGradeInputField} key={generateUUID()} />,
             ]}
         />
     );
@@ -132,7 +147,7 @@ export function ComplianceRateFieldBox() {
             label="Nbr exigé"
             small={true}
             min="0"
-            key="1"
+            key={generateUUID()}
         />
     );
     const placedElementsInputField = (
@@ -142,7 +157,7 @@ export function ComplianceRateFieldBox() {
             label="Nbr effectué"
             small={true}
             min="0"
-            key="2"
+            key={generateUUID()}
         />
     );
     //#endregion
@@ -150,7 +165,7 @@ export function ComplianceRateFieldBox() {
     const complianceRate = {
         value: ((placedElements / requiredElements) * 100).removeTrailingZeros(2),
         label: "Respecté à ... %",
-        key: "3",
+        key: generateUUID(),
     };
 
     //#region Output field
