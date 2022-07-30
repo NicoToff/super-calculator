@@ -12,93 +12,107 @@ export function ErrorRateFieldBox() {
     let [maxGrade, setMaxGrade] = useState(10);
     maxGrade = Number(maxGrade);
 
-    // Calculating and formatting error % ------------------------------------------------------------------
-    let errorPercentage = ((nbrErrors / nbrWords) * 100).removeTrailingZeros(2);
+    //#region Input Fields
+    const nbrWordsInputField = (
+        <InputField setter={setNbrWords} type="number" label="Nbr mots" small={true} key="1" min="0" />
+    );
+    const nbrErrorsInputField = (
+        <InputField setter={setNbrErrors} type="number" label="Nbr erreurs" small={true} key="2" min="0" />
+    );
+    const maxGradeInputField = (
+        <InputField
+            setter={setMaxGrade}
+            type="number"
+            label="Résultat sur ..."
+            defaultValue="10"
+            min="1"
+            key="6"
+        />
+    );
+    //#endregion
 
+    const errorPercentage = {
+        value: ((nbrErrors / nbrWords) * 100).removeTrailingZeros(2),
+        label: "% erreurs",
+        key: "3",
+    };
+
+    const grade = {
+        value: ((10 - errorPercentage.value) * (maxGrade / 10)).removeTrailingZeros(2),
+        label: "Résultat sur " + maxGrade,
+        key: "4",
+    };
+
+    if (grade.value < 0) {
+        grade.value = 0; // Setting min grade at 0
+    }
+
+    //#region Output field
     // Building OutputField dynamically --------------------------------------------------------------------
-    let errorPercentageOutputField;
-    const [epofLabel, epofKey] = ["% erreurs", "3"];
-    // Calculating and formatting grading out of 10, initially ---------------------------------------------
-    // This value can be dynamically changed with the Option field -----------------------------------------
-    let grade = ((10 - errorPercentage) * (maxGrade / 10)).removeTrailingZeros(2);
-    if (grade <= 0) {
-        grade = 0; // Setting min grade at 0
-    }
-    let gradeOutputField;
-    const [gofLabel, gofKey] = ["Résultat sur " + maxGrade, "4"];
-
     // Conditionnally renders OutputFields based on the validity of the InputField states ------------------
-    if (nbrWords < nbrErrors || nbrWords < 0 || nbrErrors < 0) {
-        errorPercentageOutputField = (
-            <OutputField value="Erreur" type="text" label={epofLabel} classes="is-invalid" key={epofKey} />
-        );
-        gradeOutputField = (
-            <OutputField value="Erreur" type="text" label={gofLabel} classes="is-invalid" key={gofKey} />
-        );
-    } else if (nbrWords === 0) {
-        errorPercentageOutputField = (
-            <OutputField value="Entrez les valeurs" type="text" label={epofLabel} key={epofKey} />
-        );
-        gradeOutputField = (
-            <OutputField value="Entrez les valeurs" type="text" label={gofLabel} key={gofKey} />
-        );
-    } else {
-        errorPercentageOutputField = (
+
+    /* ERROR case */ if (nbrWords < nbrErrors || nbrWords < 0 || nbrErrors < 0) {
+        errorPercentage.OutputField = (
             <OutputField
-                value={errorPercentage + " %"}
+                value="Erreur"
                 type="text"
-                label={epofLabel}
-                classes="is-valid"
-                key={epofKey}
+                label={errorPercentage.label}
+                classes="is-invalid"
+                key={errorPercentage.key}
             />
         );
-        gradeOutputField = (
+        grade.OutputField = (
             <OutputField
-                value={grade + " / " + maxGrade}
+                value="Erreur"
                 type="text"
-                label={gofLabel}
+                label={grade.label}
+                classes="is-invalid"
+                key={grade.key}
+            />
+        );
+    } /* Load page case */ else if (nbrWords === 0) {
+        errorPercentage.OutputField = (
+            <OutputField
+                value="Entrez les valeurs"
+                type="text"
+                label={errorPercentage.label}
+                key={errorPercentage.key}
+            />
+        );
+        grade.OutputField = (
+            <OutputField value="Entrez les valeurs" type="text" label={grade.label} key={grade.key} />
+        );
+    } /* Correct input case */ else {
+        errorPercentage.OutputField = (
+            <OutputField
+                value={errorPercentage.value + " %"}
+                type="text"
+                label={errorPercentage.label}
                 classes="is-valid"
-                key={gofKey}
+                key={errorPercentage.key}
+            />
+        );
+        grade.OutputField = (
+            <OutputField
+                value={grade.value + " / " + maxGrade}
+                type="text"
+                label={grade.label}
+                classes="is-valid"
+                key={grade.key}
             />
         );
     }
+    //#endregion
 
     return (
         <FieldBox
             title="Pourcentage d'erreurs"
             fields={[
-                <InputField
-                    setter={setNbrWords}
-                    type="number"
-                    label="Nbr mots"
-                    small={true}
-                    key="1"
-                    min="0"
-                />,
-                <InputField
-                    setter={setNbrErrors}
-                    type="number"
-                    label="Nbr erreurs"
-                    small={true}
-                    key="2"
-                    min="0"
-                />,
-                errorPercentageOutputField,
-                gradeOutputField,
-                <Accordion
-                    title="Options"
-                    body={
-                        <InputField
-                            setter={setMaxGrade}
-                            type="number"
-                            label="Résultat sur ..."
-                            defaultValue="10"
-                            min="1"
-                            key="6"
-                        />
-                    }
-                    key="5"
-                />,
+                nbrWordsInputField,
+                nbrErrorsInputField,
+                errorPercentage.OutputField,
+                grade.OutputField,
+                <Accordion title="Options" body={maxGradeInputField} key="5" />,
             ]}
         />
     );
@@ -110,58 +124,74 @@ export function ComplianceRateFieldBox() {
     let [placedElements, setPlacedElements] = useState(0);
     placedElements = Number(placedElements);
 
-    // Calculating and formatting compliance % -------------------------------------------------------------
-    const compliancePercentage = ((placedElements / requiredElements) * 100).toFixed(2);
-    const compliancePercentageString = compliancePercentage + " %";
+    //#region Input Fields
+    const requiredElementsInputField = (
+        <InputField
+            setter={setRequiredElements}
+            type="number"
+            label="Nbr exigé"
+            small={true}
+            min="0"
+            key="1"
+        />
+    );
+    const placedElementsInputField = (
+        <InputField
+            setter={setPlacedElements}
+            type="number"
+            label="Nbr effectué"
+            small={true}
+            min="0"
+            key="2"
+        />
+    );
+    //#endregion
 
+    const complianceRate = {
+        value: ((placedElements / requiredElements) * 100).removeTrailingZeros(2),
+        label: "Respecté à ... %",
+        key: "3",
+    };
+
+    //#region Output field
     // Building OutputField dynamically --------------------------------------------------------------------
-    let complianceRateOutputField;
-    const [crofLabel, crofKey] = ["Respecté à ... %", "3"];
-
     // Conditionnally renders OutputFields based on the validity of the InputField states ------------------
-    if (requiredElements < placedElements || requiredElements < 0 || placedElements < 0) {
-        complianceRateOutputField = (
-            <OutputField value="Erreur" type="text" label={crofLabel} classes="is-invalid" key={crofKey} />
-        );
-    } else if (requiredElements === 0) {
-        complianceRateOutputField = (
-            <OutputField value="Entrez les valeurs" type="text" label={crofLabel} key={crofKey} />
-        );
-    } else {
-        complianceRateOutputField = (
+    /* Error case */ if (requiredElements < placedElements || requiredElements < 0 || placedElements < 0) {
+        complianceRate.OutputField = (
             <OutputField
-                value={compliancePercentageString}
+                value="Erreur"
                 type="text"
-                label={crofLabel}
+                label={complianceRate.label}
+                classes="is-invalid"
+                key={complianceRate.key}
+            />
+        );
+    } /* Page load case */ else if (requiredElements === 0) {
+        complianceRate.OutputField = (
+            <OutputField
+                value="Entrez les valeurs"
+                type="text"
+                label={complianceRate.label}
+                key={complianceRate.key}
+            />
+        );
+    } /* Correct input case */ else {
+        complianceRate.OutputField = (
+            <OutputField
+                value={complianceRate.value + " %"}
+                type="text"
+                label={complianceRate.label}
                 classes="is-valid"
-                key={crofKey}
+                key={complianceRate.key}
             />
         );
     }
+    //#endregion
 
     return (
         <FieldBox
             title="Respect des consignes"
-            fields={[
-                <InputField
-                    setter={setRequiredElements}
-                    type="number"
-                    label="Nbr exigé"
-                    small={true}
-                    min="0"
-                    key="1"
-                />,
-                <InputField
-                    setter={setPlacedElements}
-                    type="number"
-                    label="Nbr effectué"
-                    small={true}
-                    min="0"
-                    key="2"
-                />,
-                complianceRateOutputField,
-                <Accordion title="Options" key="4" />,
-            ]}
+            fields={[requiredElementsInputField, placedElementsInputField, complianceRate.OutputField]}
         />
     );
 }
@@ -175,11 +205,12 @@ function isFloat(n) {
     return Number(n) === n && n % 1 !== 0;
 }
 
+/**
+ * Removes trailing zeroes on a number.
+ * @param {number} accuracy (Optional) Sets the max number of decimal digits (same as Number.prototype.toFixed())
+ * @returns {number} The number
+ */
 Number.prototype.removeTrailingZeros = function (accuracy = null) {
-    let num = Number(this.valueOf());
-    if (isNaN(num)) {
-        return this.valueOf();
-    } else {
-        return isFloat(num) && accuracy != null ? num.toFixed(accuracy) : num;
-    }
+    const num = this.valueOf();
+    return isFloat(num) && accuracy != null ? num.toFixed(accuracy) : num;
 };
