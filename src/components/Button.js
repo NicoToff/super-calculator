@@ -8,7 +8,8 @@ export default function Button({
     onClick = undefined,
     disabled = false,
 }) {
-    const classesTotal = "btn " + ("btn-" + color) + " " + otherClasses;
+    const classesTotal = `btn btn-${color} ${otherClasses}`;
+
     return (
         <button className={classesTotal} type={type} onClick={onClick} disabled={disabled}>
             {text}

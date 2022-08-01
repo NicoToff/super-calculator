@@ -8,12 +8,14 @@ import { ErrorRateFieldBox, ComplianceRateFieldBox } from "./components/composit
 import { useState } from "react";
 
 export default function App() {
-    const cssClasses = "border rounded p-3 m-1 col-sm";
+    const fieldBoxCss = "border rounded p-3 m-1 col-sm";
+
+    // One can add new fields to the App with the press of a button
     const newRow = () => (
         <Row
             children={[
-                <ErrorRateFieldBox classes={cssClasses} key={generateUUID()} />,
-                <ComplianceRateFieldBox classes={cssClasses} key={generateUUID()} />,
+                <ErrorRateFieldBox classes={fieldBoxCss} key={generateUUID()} />,
+                <ComplianceRateFieldBox classes={fieldBoxCss} key={generateUUID()} />,
             ]}
             key={generateUUID()}
         />
@@ -26,15 +28,15 @@ export default function App() {
             <header className="App-header">
                 <h1>Super React Calculator</h1>
                 <img src={logo} className="App-logo" alt="React logo" />
+                <div className="container">
+                    <div className="row">{boxList}</div>
+                </div>
                 <Button
                     text="Rajouter des champs"
                     onClick={addBoxes}
                     color="success"
-                    otherClasses="btn-lg m-5"
+                    otherClasses="btn-lg m-3"
                 />
-                <div className="container">
-                    <div className="row">{boxList}</div>
-                </div>
             </header>
         </div>
     );

@@ -33,7 +33,7 @@ export function ErrorRateFieldBox({ classes = undefined }) {
     //#endregion
 
     const errorPercentage = {
-        value: ((nbrErrors / nbrWords) * 100).removeTrailingZeros(2),
+        value: makePercentage(nbrErrors, nbrWords, 2),
         label: "% erreurs",
         key: "3",
     };
@@ -150,7 +150,7 @@ export function ComplianceRateFieldBox({ classes = undefined }) {
     //#endregion
 
     const complianceRate = {
-        value: ((placedElements / requiredElements) * 100).removeTrailingZeros(2),
+        value: makePercentage(placedElements, requiredElements, 2),
         label: "Respecté à ... %",
         key: "3",
     };
@@ -206,14 +206,20 @@ export function ComplianceRateFieldBox({ classes = undefined }) {
  */
 const isFloat = n => Number(n) === n && n % 1 !== 0;
 
-const makePercentage = (value, reference) => (value / reference) * 100;
+const makePercentage = (value, reference, precision = 20) =>
+    Number(((value / reference) * 100).removeTrailingZeros(precision));
+
+// TODO
+// const normalize = (value, reference) => value / reference
 
 /**
  * Removes trailing zeroes on a number.
- * @param {number} accuracy (Optional) Sets the max number of decimal digits (same as Number.prototype.toFixed())
+ * @param {number} precision (Optional) Sets the max number of decimal digits (same as Number.prototype.toFixed())
  * @returns {number} The number
  */
-Number.prototype.removeTrailingZeros = function (accuracy = null) {
-    const num = this.valueOf();
-    return isFloat(num) && accuracy != null ? num.toFixed(accuracy) : num;
+Number.prototype.removeTrailingZeros = function (precision = null) {
+    let num;
+    // Removes insignificant digits from the start if precision is not null; this avoids x.00% being displayed
+    precision != null ? (num = Number(this.valueOf().toFixed(precision))) : (num = this.valueOf());
+    return isFloat(num) && precision != null ? num.toFixed(precision) : num;
 };
