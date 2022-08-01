@@ -9,11 +9,12 @@ import { generateUUID } from "./helperFunctions.js";
 import { useState } from "react";
 
 export default function App() {
+    const cssClasses = "border rounded p-3 m-1 col-sm";
     const newRow = () => (
         <Row
             children={[
-                <ErrorRateFieldBox key={generateUUID()} />,
-                <ComplianceRateFieldBox key={generateUUID()} />,
+                <ErrorRateFieldBox classes={cssClasses} key={generateUUID()} />,
+                <ComplianceRateFieldBox classes={cssClasses} key={generateUUID()} />,
             ]}
             key={generateUUID()}
         />

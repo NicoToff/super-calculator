@@ -5,7 +5,7 @@ import FieldBox from "../FieldBox.js";
 import Accordion from "../Accordion.js";
 import { generateUUID } from "../../helperFunctions.js";
 
-export function ErrorRateFieldBox() {
+export function ErrorRateFieldBox({ classes = undefined }) {
     let [nbrWords, setNbrWords] = useState(0);
     nbrWords = Number(nbrWords);
     let [nbrErrors, setNbrErrors] = useState(0);
@@ -34,6 +34,7 @@ export function ErrorRateFieldBox() {
             min="0"
         />
     );
+    /* Field found under "Options" */
     const maxGradeInputField = (
         <InputField
             setter={setMaxGrade}
@@ -59,7 +60,7 @@ export function ErrorRateFieldBox() {
     };
 
     if (grade.value < 0) {
-        grade.value = 0; // Setting min grade at 0
+        grade.value = 0; // Min grade can be lower than 0
     }
 
     //#region Output field
@@ -129,11 +130,12 @@ export function ErrorRateFieldBox() {
                 grade.OutputField,
                 <Accordion title="Options" body={maxGradeInputField} key={generateUUID()} />,
             ]}
+            classes={classes}
         />
     );
 }
 
-export function ComplianceRateFieldBox() {
+export function ComplianceRateFieldBox({ classes = undefined }) {
     let [requiredElements, setRequiredElements] = useState(0);
     requiredElements = Number(requiredElements);
     let [placedElements, setPlacedElements] = useState(0);
@@ -207,6 +209,7 @@ export function ComplianceRateFieldBox() {
         <FieldBox
             title="Respect des consignes"
             fields={[requiredElementsInputField, placedElementsInputField, complianceRate.OutputField]}
+            classes={classes}
         />
     );
 }
@@ -216,9 +219,9 @@ export function ComplianceRateFieldBox() {
  * @param {any} n
  * @returns {boolean} true if the argument is a non-integer number
  */
-function isFloat(n) {
-    return Number(n) === n && n % 1 !== 0;
-}
+const isFloat = n => Number(n) === n && n % 1 !== 0;
+
+const makePercentage = (value, reference) => (value / reference) * 100;
 
 /**
  * Removes trailing zeroes on a number.
