@@ -11,6 +11,10 @@ export function ErrorRateFieldBox({ classes = undefined }) {
     nbrErrors = Number(nbrErrors);
     let [maxGrade, setMaxGrade] = useState(10);
     maxGrade = Number(maxGrade);
+    let [penaltyPercent, setPenaltyPercent] = useState(0);
+    penaltyPercent = Number(penaltyPercent);
+    let [penaltySubtract, setPenaltySubtract] = useState(0);
+    penaltySubtract = Number(penaltySubtract);
 
     //#region Input Fields
     const nbrWordsInputField = (
@@ -30,6 +34,28 @@ export function ErrorRateFieldBox({ classes = undefined }) {
             key="6"
         />
     );
+    const penaltyPercentInputField = (
+        <InputField
+            setter={setPenaltyPercent}
+            type="number"
+            label="Malus sur la note (en %)"
+            defaultValue="0"
+            min="0"
+            max="100"
+            key="7"
+        />
+    );
+    const penaltySubtractInputField = (
+        <InputField
+            setter={setPenaltySubtract}
+            type="number"
+            label="Malus soustrait (en %)"
+            defaultValue="0"
+            min="0"
+            max="100"
+            key="8"
+        />
+    );
     //#endregion
 
     const errorPercentage = {
@@ -39,13 +65,16 @@ export function ErrorRateFieldBox({ classes = undefined }) {
     };
 
     const grade = {
-        value: ((10 - errorPercentage.value) * (maxGrade / 10)).removeTrailingZeros(2),
+        value: (
+            (10 - errorPercentage.value) * (maxGrade / 10) * (1 - penaltyPercent / 100) -
+            (penaltySubtract / 100) * maxGrade
+        ).removeTrailingZeroes(2),
         label: "Résultat sur " + maxGrade,
         key: "4",
     };
 
     if (grade.value < 0) {
-        grade.value = 0; // Min grade can be lower than 0
+        grade.value = 0; // Min grade cannot be lower than 0
     }
 
     //#region Output field
@@ -113,7 +142,11 @@ export function ErrorRateFieldBox({ classes = undefined }) {
                 nbrErrorsInputField,
                 errorPercentage.OutputField,
                 grade.OutputField,
-                <Accordion title="Options" body={maxGradeInputField} key="5" />,
+                <Accordion
+                    title="Options"
+                    body={[maxGradeInputField, penaltyPercentInputField, penaltySubtractInputField]}
+                    key="5"
+                />,
             ]}
             classes={classes}
         />
@@ -207,7 +240,7 @@ export function ComplianceRateFieldBox({ classes = undefined }) {
 const isFloat = n => Number(n) === n && n % 1 !== 0;
 
 const makePercentage = (value, reference, precision = 20) =>
-    Number(((value / reference) * 100).removeTrailingZeros(precision));
+    Number(((value / reference) * 100).removeTrailingZeroes(precision));
 
 // TODO
 // const normalize = (value, reference) => value / reference
@@ -217,7 +250,7 @@ const makePercentage = (value, reference, precision = 20) =>
  * @param {number} precision (Optional) Sets the max number of decimal digits (same as Number.prototype.toFixed())
  * @returns {number} The number
  */
-Number.prototype.removeTrailingZeros = function (precision = null) {
+Number.prototype.removeTrailingZeroes = function (precision = null) {
     let num;
     // Removes insignificant digits from the start if precision is not null; this avoids x.00% being displayed
     precision != null ? (num = Number(this.valueOf().toFixed(precision))) : (num = this.valueOf());

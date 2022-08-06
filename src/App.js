@@ -25,9 +25,11 @@ export default function App() {
 
     return (
         <div className="App">
-            <header className="App-header">
+            <nav className="App-navbar">
                 <h1>Super React Calculator</h1>
                 <img src={logo} className="App-logo" alt="React logo" />
+            </nav>
+            <header className="App-body">
                 <div className="container">
                     <div className="row">{boxList}</div>
                 </div>
@@ -38,6 +40,7 @@ export default function App() {
                     otherClasses="btn-lg m-3"
                 />
             </header>
+            <footer className="App-footer">Powered by React &amp; NicoToff</footer>
         </div>
     );
 }
