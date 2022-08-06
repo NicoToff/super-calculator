@@ -26,7 +26,7 @@ export default function App() {
     return (
         <div className="App">
             <nav className="App-navbar">
-                <h1>Super React Calculator</h1>
+                <h1>Teacher Calculator</h1>
                 <img src={logo} className="App-logo" alt="React logo" />
             </nav>
             <header className="App-body">

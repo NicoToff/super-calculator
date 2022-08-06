@@ -69,7 +69,7 @@ export function ErrorRateFieldBox({ classes = undefined }) {
             (10 - errorPercentage.value) * (maxGrade / 10) * (1 - penaltyPercent / 100) -
             (penaltySubtract / 100) * maxGrade
         ).removeTrailingZeroes(2),
-        label: "Résultat sur " + maxGrade,
+        label: `Résultat sur ${maxGrade}`,
         key: "4",
     };
 
@@ -115,7 +115,7 @@ export function ErrorRateFieldBox({ classes = undefined }) {
     } /* Correct input case */ else {
         errorPercentage.OutputField = (
             <OutputField
-                value={errorPercentage.value + " %"}
+                value={`${errorPercentage.value} %`}
                 type="text"
                 label={errorPercentage.label}
                 classes="is-valid"
@@ -124,7 +124,7 @@ export function ErrorRateFieldBox({ classes = undefined }) {
         );
         grade.OutputField = (
             <OutputField
-                value={grade.value + " / " + maxGrade}
+                value={`${grade.value} / ${maxGrade}`}
                 type="text"
                 label={grade.label}
                 classes="is-valid"
@@ -213,7 +213,7 @@ export function ComplianceRateFieldBox({ classes = undefined }) {
     } /* Correct input case */ else {
         complianceRate.OutputField = (
             <OutputField
-                value={complianceRate.value + " %"}
+                value={`${complianceRate.value} %`}
                 type="text"
                 label={complianceRate.label}
                 classes="is-valid"

@@ -42,7 +42,7 @@ export function InputField({
 }
 
 export function OutputField({ value, type, label = "Output", classes = "" }) {
-    let classesTotal = "form-control " + classes;
+    let classesTotal = `form-control ${classes}`;
 
     return (
         <div>
