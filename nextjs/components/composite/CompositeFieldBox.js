@@ -138,7 +138,7 @@ export function ErrorRateFieldBox({ classes = undefined }) {
                 nbrErrorsInputField,
                 errorPercentage.OutputField,
                 grade.OutputField,
-                <h3>{`Options:`}</h3>,
+                <h3 key={"42"}>{`Options:`}</h3>,
                 maxGradeInputField,
                 penaltyPercentInputField,
                 penaltySubtractInputField,
