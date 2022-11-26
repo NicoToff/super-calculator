@@ -49,10 +49,10 @@ export function ErrorRateFieldBox({ classes = undefined }) {
         <InputField
             setter={setPenaltySubtract}
             type="number"
-            label="Malus soustrait (en %)"
+            label={`Malus soustrait (en %)`}
             defaultValue="0"
             min="0"
-            max="100"
+            max={maxGrade}
             key="8"
         />
     );
@@ -232,18 +232,13 @@ export function ComplianceRateFieldBox({ classes = undefined }) {
     );
 }
 
+//#region Functions & methods
 /**
  * Checks if a value is a float
  * @param {any} n
  * @returns {boolean} true if the argument is a non-integer number
  */
 const isFloat = n => Number(n) === n && n % 1 !== 0;
-
-const makePercentage = (value, reference, precision = 20) =>
-    Number(((value / reference) * 100).removeTrailingZeroes(precision));
-
-// TODO
-// const normalize = (value, reference) => value / reference
 
 /**
  * Removes trailing zeroes on a number.
@@ -256,3 +251,10 @@ Number.prototype.removeTrailingZeroes = function (precision = null) {
     precision != null ? (num = Number(this.valueOf().toFixed(precision))) : (num = this.valueOf());
     return isFloat(num) && precision != null ? num.toFixed(precision) : num;
 };
+
+const normalize = (value, reference) => value / reference;
+
+const makePercentage = (value, reference, precision = 20) =>
+    Number((normalize(value, reference) * 100).removeTrailingZeroes(precision));
+
+//#endregion
